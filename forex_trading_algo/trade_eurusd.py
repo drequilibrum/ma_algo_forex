@@ -5,12 +5,9 @@ from oandapyV20.endpoints import instruments, accounts, orders, trades, position
 import oandapyV20.endpoints.pricing as pricing
 import pandas as pd
 import numpy as np
-import mplcyberpunk
-import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import schedule
 import time
-plt.style.use("cyberpunk")
 
 
 ACCESS_TOKEN = "4aa51e7711418ba1aa356b835fab3afd-53be4f4d5aa21768bf421b354527dc96"
@@ -54,42 +51,41 @@ def trade():
         open_trade_request = trades.OpenTrades(accountID=ACCOUNT_ID)
         open_trade = client.request(open_trade_request)
         open_trade = open_trade["trades"]
-        open_trade_request = trades.OpenTrades(accountID=ACCOUNT_ID)
-        open_trade = client.request(open_trade_request)
-        open_trade = open_trade["trades"]
         if open_trade:
             # Get the ID of the first open trade
             trade_id = open_trade[0]["id"]
-            current_units = open_trade[0]["currentUnits"]
             
             # Step 2: Close the trade
             close_trade_request = trades.TradeClose(accountID=ACCOUNT_ID, tradeID=trade_id)
             close_trade_response = client.request(close_trade_request)
             
             # Print the response
-            print(f"Trade closed: {close_trade_response}")
-        else:
-            to_date = get_to_date_in_utc()
-            data = make_df(
-                get_prices(to_date=to_date)
-                )
-            signal = get_signal(data)
-            quantity = 10000 if signal > 0 else -10000
-            # Order details
-            order_data = {
-                "order": {
-                    "instrument": "EUR_USD",  # Replace with your desired instrument
-                    "units": quantity,  # Number of units to buy (positive for buy, negative for sell)
-                    "type": "MARKET",  # Order type
-                    "positionFill": "DEFAULT"  # Order position fill option
-                }
+            print(f'Trade closed at price: {close_trade_response["orderFillTransaction"]["price"]}')
+
+        
+        to_date = get_to_date_in_utc()
+        data = make_df(
+            get_prices(to_date=to_date)
+            )
+        signal = get_signal(data)
+        quantity = 10000 if signal > 0 else -10000
+        # Order details
+        order_data = {
+            "order": {
+                "instrument": "EUR_USD",  # Replace with your desired instrument
+                "units": quantity,  # Number of units to buy (positive for buy, negative for sell)
+                "type": "MARKET",  # Order type
+                "positionFill": "DEFAULT"  # Order position fill option
             }
-            trade_request = orders.OrderCreate(accountID=ACCOUNT_ID, data=order_data)
-            trade = client.request(trade_request)
-            print(f"Trade opened: {trade}")
+        }
+        trade_request = orders.OrderCreate(accountID=ACCOUNT_ID, data=order_data)
+        trade = client.request(trade_request)
+        action = "Bought" if signal > 0 else "Sold"
+        print(f'{action} at price: {trade["orderFillTransaction"]["price"]}')
 
 
-schedule.every(4).hours.at(":00").do(trade)
+#schedule.every(4).hours.at(":00").do(trade)
+schedule.every(2).minutes.do(trade)
 print("Trading algorithm started.")
 while True:
     # Run all pending jobs
