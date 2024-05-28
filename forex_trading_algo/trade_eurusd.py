@@ -60,7 +60,7 @@ def trade():
             close_trade_response = client.request(close_trade_request)
             
             # Print the response
-            print(f'Trade closed at price: {close_trade_response["orderFillTransaction"]["price"]}')
+            print(f'TRADE CLOSED: {close_trade_response}')
 
         
         to_date = get_to_date_in_utc()
@@ -81,7 +81,7 @@ def trade():
         trade_request = orders.OrderCreate(accountID=ACCOUNT_ID, data=order_data)
         trade = client.request(trade_request)
         action = "Bought" if signal > 0 else "Sold"
-        print(f'{action} at price: {trade["orderFillTransaction"]["price"]}')
+        print(f'{action}: {trade}')
 
 
 schedule.every(4).hours.at(":00").do(trade)
