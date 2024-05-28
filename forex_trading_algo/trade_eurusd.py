@@ -43,7 +43,7 @@ def get_signal(data):
   data["1h_spread"] = data["close"].diff()
   data["ma2"] = data["1h_spread"].rolling(window=2).mean()
   data["signal"] = data[["1h_spread","ma2"]].mean(axis=1)
-  return np.sign(data["signal"].iloc[-1])
+  return -np.sign(data["signal"].iloc[-1])
 
 
 def trade():
@@ -84,8 +84,8 @@ def trade():
         print(f'{action} at price: {trade["orderFillTransaction"]["price"]}')
 
 
-#schedule.every(4).hours.at(":00").do(trade)
-schedule.every(2).minutes.do(trade)
+schedule.every(4).hours.at(":00").do(trade)
+#schedule.every(2).minutes.do(trade)
 print("Trading algorithm started.")
 while True:
     # Run all pending jobs
