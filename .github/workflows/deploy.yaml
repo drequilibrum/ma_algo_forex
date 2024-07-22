@@ -22,13 +22,10 @@ jobs:
         run: |
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-      - name: Test SSH connection and set permissions
+      - name: Change permissions of SSH files
         run: |
-          ssh -v ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            echo "SSH connection established"
-            chmod 700 ~/.ssh
-            chmod 600 ~/.ssh/authorized_keys
-          EOF
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/authorized_keys
 
       - name: Copy files to the server
         run: |
@@ -36,7 +33,7 @@ jobs:
 
       - name: Set environment variables on the server
         run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << EOF
             export ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}
             export ACCOUNT_ID=${{ secrets.ACCOUNT_ID }}
             # Save these variables in the .bashrc or .profile to persist them
@@ -47,7 +44,7 @@ jobs:
 
       - name: Restart the application
         run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << EOF
             # Commands to restart your application, for example:
             cd forex_algo/forex_trading_algo
             python trade_eurusd.py
