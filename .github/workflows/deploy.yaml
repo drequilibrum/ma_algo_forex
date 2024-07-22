@@ -22,6 +22,14 @@ jobs:
         run: |
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
+      - name: Test SSH connection and set permissions
+        run: |
+          ssh -v ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            echo "SSH connection established"
+            chmod 700 ~/.ssh
+            chmod 600 ~/.ssh/authorized_keys
+          EOF
+
       - name: Copy files to the server
         run: |
           scp -r ./* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:~/forex_algo
