@@ -29,13 +29,13 @@ jobs:
 
       - name: Copy files to the server
         run: |
-          scp -r ma_algo_forex/forex_trading_algo ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:~/forex_algo
+          scp -r ma_algo_forex/forex_trading_algo ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:~/forex_algo
         env:
           SSH_AUTH_SOCK: $SSH_AUTH_SOCK
 
       - name: Set environment variables on the server
         run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} 'bash -s' << 'EOF'
+          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'bash -s' << 'EOF'
             echo "export ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> ~/.bashrc
             echo "export ACCOUNT_ID=${{ secrets.ACCOUNT_ID }}" >> ~/.bashrc
             source ~/.bashrc
@@ -45,7 +45,7 @@ jobs:
 
       - name: Restart the application
         run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} 'bash -s' << 'EOF'
+          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'bash -s' << 'EOF'
             cd forex_algo/forex_trading_algo
             python trade_eurusd.py
           EOF
