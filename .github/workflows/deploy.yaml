@@ -29,14 +29,8 @@ jobs:
           ssh -T ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} || true
 
       - name: Copy files to the server
-        uses: pierrickdelrieu/scp-action@0.1.1
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          ssh_username: ${{ secrets.SERVER_USERNAME }}
-          ssh_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source_dir: forex_trading_algo
-          destination_dir: ~/forex_algo/forex_trading_algo
-          rm: true
+        run:
+          scp -r forex_trading_algo ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:~/forex_algo/forex_trading_algo
 
       - name: Restart the application
         run: |
