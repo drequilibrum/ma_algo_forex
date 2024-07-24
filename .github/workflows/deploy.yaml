@@ -37,16 +37,6 @@ jobs:
           destination_dir: ~/forex_algo/forex_trading_algo
           rm: true
 
-      - name: Set environment variables on the server
-        run: |
-          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'bash -s' << 'EOF'
-            echo "export ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> ~/.bashrc
-            echo "export ACCOUNT_ID=${{ secrets.ACCOUNT_ID }}" >> ~/.bashrc
-            source ~/.bashrc
-          EOF
-        env:
-          SSH_AUTH_SOCK: $SSH_AUTH_SOCK
-
       - name: Restart the application
         run: |
           ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'bash -s' << 'EOF'
