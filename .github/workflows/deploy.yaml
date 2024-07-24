@@ -35,4 +35,4 @@ jobs:
       - name: Restart the application
         run: |
           ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'chmod -R 777 ~/forex_algo'
-          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'screen -XS trade quit; screen -Sd trade ~/runner.sh'
+          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'screen -XS trade quit; screen -Sdm trade ~/runner.sh'
