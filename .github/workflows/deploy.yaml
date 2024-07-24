@@ -28,7 +28,7 @@ jobs:
           ssh -T ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} || true
 
       - name: Copy files to the server
-        uses: pierrickdelrieu/scp-action@v0.1.1
+        uses: pierrickdelrieu/scp-action@0.1.1
         with:
           host: ${{ secrets.SERVER_IP }}
           ssh_username: ${{ secrets.SERVER_USERNAME }}
