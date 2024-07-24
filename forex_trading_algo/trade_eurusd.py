@@ -25,6 +25,7 @@ def get_prices(to_date: str, count: int = 3,instrument: str = "EUR_USD", granula
   return client.request(r)
 
 
+
 def make_df(data: dict):
   data = pd.DataFrame(data["candles"])
   candles = pd.json_normalize(data["mid"]).rename(columns={"o": "open", "h": "high", "l": "low", "c": "close"})
