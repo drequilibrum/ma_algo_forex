@@ -28,10 +28,14 @@ jobs:
           ssh -T ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} || true
 
       - name: Copy files to the server
-        run: |
-          scp -r ~/ma_algo_forex/forex_trading_algo/* ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:~/forex_algo/forex_trading_algo/
-        env:
-          SSH_AUTH_SOCK: $SSH_AUTH_SOCK
+        uses: pierrickdelrieu/scp-action@v0.1.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          ssh_username: ${{ secrets.SERVER_USERNAME }}
+          ssh_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source_dir: ~/work/ma_algo_forex/forex_trading_algo
+          destination_dir: ~/forex_algo/forex_trading_algo
+          rm: true
 
       - name: Set environment variables on the server
         run: |
