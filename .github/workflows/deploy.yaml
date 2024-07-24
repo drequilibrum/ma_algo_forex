@@ -23,6 +23,10 @@ jobs:
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
+      - name: Verify SSH setup
+        run: |
+          ssh -T ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} || true
+
       - name: Copy files to the server
         run: |
           scp -r ./* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:~/forex_algo
@@ -38,7 +42,6 @@ jobs:
           EOF
         env:
           SSH_AUTH_SOCK: $SSH_AUTH_SOCK
-          
 
       - name: Restart the application
         run: |
