@@ -38,6 +38,7 @@ jobs:
           EOF
         env:
           SSH_AUTH_SOCK: $SSH_AUTH_SOCK
+          
 
       - name: Restart the application
         run: |
