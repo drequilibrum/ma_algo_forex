@@ -34,9 +34,6 @@ jobs:
 
       - name: Restart the application
         run: |
-          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'bash -s' << 'EOF'
-            cd forex_algo/forex_trading_algo
-            python trade_eurusd.py
-          EOF
+          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'cd forex_algo/forex_trading_algo; python trade_eurusd.py;'
         env:
           SSH_AUTH_SOCK: $SSH_AUTH_SOCK
