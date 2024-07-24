@@ -29,7 +29,7 @@ jobs:
 
       - name: Copy files to the server
         run: |
-          scp -r ~/ma_algo_forex/forex_trading_algo ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:~/forex_algo
+          scp -r ~/ma_algo_forex/forex_trading_algo/* ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:~/forex_algo
         env:
           SSH_AUTH_SOCK: $SSH_AUTH_SOCK
 
