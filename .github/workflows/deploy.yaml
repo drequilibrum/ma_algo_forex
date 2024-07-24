@@ -25,7 +25,7 @@ jobs:
 
       - name: Verify SSH setup
         run: |
-          ssh -T ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} || true
+          ssh -T ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} || true
 
       - name: Copy files to the server
         run: |
