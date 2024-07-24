@@ -34,6 +34,7 @@ jobs:
 
       - name: Restart the application
         run: |
-          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'cd forex_algo/forex_trading_algo; python trade_eurusd.py;'
+          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'chmod -R 777 ~/forex_algo'
+          ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'cd ~/forex_algo/forex_trading_algo; python trade_eurusd.py;'
         env:
           SSH_AUTH_SOCK: $SSH_AUTH_SOCK
