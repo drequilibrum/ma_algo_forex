@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.5.4
@@ -28,7 +28,7 @@ jobs:
           ssh -T ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} || true
 
       - name: Copy files to the server
-        uses: pierrickdelrieu/scp-action@v0.1.0
+        uses: pierrickdelrieu/scp-action@v0.1.1
         with:
           host: ${{ secrets.SERVER_IP }}
           ssh_username: ${{ secrets.SERVER_USERNAME }}
