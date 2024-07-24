@@ -18,20 +18,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: List added SSH keys (debug step)
-        run: ssh-add -l
-
-      - name: Create .ssh directory and set permissions
-        run: |
-          chmod 700 ~/.ssh
-
       - name: Add server to known hosts
         run: |
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
-
-      - name: Debug known hosts file
-        run: cat ~/.ssh/known_hosts
 
       - name: Copy files to the server
         run: |
