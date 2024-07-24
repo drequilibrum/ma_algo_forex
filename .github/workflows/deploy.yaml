@@ -33,7 +33,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           ssh_username: ${{ secrets.SERVER_USERNAME }}
           ssh_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source_dir: ~/work/ma_algo_forex/forex_trading_algo
+          source_dir: ~/forex_trading_algo
           destination_dir: ~/forex_algo/forex_trading_algo
           rm: true
 
