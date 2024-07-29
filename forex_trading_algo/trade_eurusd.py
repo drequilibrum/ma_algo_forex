@@ -8,6 +8,8 @@ import numpy as np
 from datetime import datetime, timedelta
 import schedule
 import time
+import pickle
+import xgboost as xgb
 
 
 ACCESS_TOKEN = "4aa51e7711418ba1aa356b835fab3afd-53be4f4d5aa21768bf421b354527dc96"
@@ -15,7 +17,7 @@ ACCOUNT_ID = "101-004-16909090-001"
 client = API(access_token=ACCESS_TOKEN)
 
 
-def get_prices(to_date: str, count: int = 3,instrument: str = "EUR_USD", granularity: str = "H1"):  
+def get_prices(to_date: str, count: int = 5,instrument: str = "EUR_USD", granularity: str = "H1"):  
   params = {
     "count": count,
     "granularity": granularity,
@@ -41,10 +43,21 @@ def is_market_open():
   return datetime.now().weekday() not in [5, 6]
 
 def get_signal(data):
-  data["1h_spread"] = data["close"].diff()
-  data["ma2"] = data["1h_spread"].rolling(window=2).mean()
-  data["signal"] = data[["1h_spread","ma2"]].mean(axis=1)
-  return -np.sign(data["signal"].iloc[-1])
+  # calculate features
+  data["1h_spread"] = data["close"].diff() * 10000
+  data["2h_spread"] = data["close"].diff(2) * 10000
+  data["3h_spread"] = data["close"].diff(3) * 10000
+  data["ma2_1h_spread"] = data["1h_spread"].rolling(window=2).mean()
+  # load the model
+  models = pickle.load(open("models/models.pkl", "rb"))
+  # predict signal
+  ensemble_prediction = 0
+  for model in models:
+     feature = model["feature"]
+     mod = model["model"]
+     feature_data = xgb.DMatrix(data[feature].iloc[-1].reshape(1, -1))
+     ensemble_prediction += mod.predict(feature_data)[-1]
+  return np.sign(ensemble_prediction / len(models))
 
 
 def trade():
